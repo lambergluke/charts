@@ -31,9 +31,6 @@ jobs:
           
       - name: Save Helm chart to local registry
         run: |
-          ls -al
-          cd charts
-          ls -al
-          
+          REPO_OWNER=`echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]'`
       
           
