@@ -31,7 +31,8 @@ jobs:
           
       - name: Save Helm chart to local registry
         run: |
-          pwd
+          ls -al
+          cd charts
           ls -al
           
       
