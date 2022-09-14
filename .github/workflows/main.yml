@@ -28,8 +28,16 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}  
+      
+      - name: Validate semver
+        run: |
+          TAG=$(echo $GITHUB_REF | grep -o "[0-9][\.].*")
+          CHART_VERSION=$(yq r chartName/Chart.yaml version)
+          echo Current chart version $CHART_VERSION
+          echo Current Tag $TAG
+          semver equal $CHART_VERSION $TAG
           
-      - name: Save Helm chart to local registry
+      - name: Push helm chart to ghcr.io
         run: |
           cd charts
           helm package api-aks-testing
