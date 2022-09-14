@@ -1,8 +1,10 @@
 name: Release
 
-
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  
 on:
-
   push:
     branches: 
      - main
@@ -12,9 +14,7 @@ on:
 jobs:
 
   release:
-
     runs-on: ubuntu-latest
-
     steps:
 
       - name: Checkout
@@ -22,11 +22,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Configure Git
-        run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.1.0
-        env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Log into registry ${{ env.REGISTRY }}
+        uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}  
+          
+          
+          
